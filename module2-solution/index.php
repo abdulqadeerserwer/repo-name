@@ -3,6 +3,8 @@
     $msg = '';
     $msgClass = '';
 
+    
+
     // Check For Submit
     if(filter_has_var(INPUT_POST, 'submit')){
       // Get Form data
@@ -10,6 +12,7 @@
       $email = htmlspecialchars($_POST['email']);
       $message = htmlspecialchars($_POST['message']);
 
+      
       // Check Required Fields 
       if(!empty($name) && !empty($email) && !empty($message)) {
         // Passed
@@ -18,6 +21,7 @@
             // Failed 
             $msg = '<h4 class="alert-heading">Warning!</h4>'.'Please enter a valid email address';
             $msgClass = 'alert alert-dismissible alert-warning';
+            
           } else {
             // Passed
             $toEmail = 'a.qadeerserwer55@gmail.com';
@@ -33,16 +37,28 @@
             
             
             // Additional Headers
-            $headers .= "From: " .$name. "<" .$email. ">". "\r\n";
+            $headers .= "From: <".$email.">"."\r\r";
+            $headers .= "Cc: ".$name. "\r\n";
+
+  
+      
 
             if(mail($toEmail, $subject, $body, $headers)) {
                 // Email Sent
                 $msg = '<h4 class="alert-heading">Sucessfully Done!</h4>'.'Your email has been sent';
-                $msgClass = 'alert alert-dismissible alert-success';
+                $msgClass = 'alert alert-dismissible alert-success feedback';
+                $name = "";
+                $email = "";
+                $message = "";
+               
             } else {
                 // Failed 
                 $msg = '<h4 class="alert-heading">Warning!</h4>'.'Your email was not sent';
-                $msgClass = 'alert alert-dismissible alert-warning';
+                $msgClass = 'alert alert-dismissible alert-warning feedback';
+                $name = "";
+                $email = "";
+                $message = "";
+               
             }
 
 
@@ -53,7 +69,10 @@
         $msg = '<h4 class="alert-heading">Warning!</h4>'.'Please fill in all fields';
         $msgClass = 'alert alert-dismissible alert-warning';
       }
+
+     
     }
+    
 
 ?>
 
@@ -64,6 +83,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://bootswatch.com/4/solar/bootstrap.min.css">
+
+  <script type="text/javascript">
+ 
+    function timedMsg()
+    {
+    var t=setTimeout("document.getElementById('myMsg').style.display='none';",4000);
+    }
+ 
+</script>
   <title>Contact Form</title>
 </head>
 <body>
@@ -74,9 +102,10 @@
 
  <div class="container">
     <?php if($msg != ''): ?>
-      <div class="alert mt-4 <?php echo $msgClass; ?>" > 
+      <div id="myMsg" class="alert mt-4 <?php echo $msgClass; ?>" > 
       <button type="button" class="close" data-dismiss="alert">&times;</button>
          <?php echo $msg; ?>
+         <script language="JavaScript" type="text/javascript">timedMsg()</script>
       </div>
     <?php endif; ?>
 
@@ -113,10 +142,8 @@
       $(document).ready(function () {
         $('.close').click(function(){
           $(".test").css("display", "none");
-      }  
-
       }
-
+}
 </script>
   
 
